@@ -5,7 +5,7 @@ The ChessAgine skill enables Claude to be a chess buddy and analyst by leveragin
 
 ## Installation
 
-1. Download `chessagine.skill` from this repository
+1. Download `chessagine-v0.0.2.skill` from this repository
 2. Open Claude Desktop
 3. Go to **Settings** → **Capabilities** → **Skills**
 4. Click **Add Skill** and select the `chessagine.skill` file
@@ -34,9 +34,12 @@ Simply ask Claude about chess:
 - **Interactive puzzle training** across 100+ themes
 - **Position visualization** with 2D/3D boards
 
-## Documentation
+## See in action
 
-See [ChessAgine_Skill_Guide.md](./ChessAgine_Skill_Guide.md) for complete reference.
+With ChessAgine position analysis skill + MCP server Claude can analyze chess positions
+
+![ChessAgine Preview](./preview.png)
+
 
 ## Authors
 
