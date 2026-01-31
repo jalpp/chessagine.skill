@@ -34,6 +34,12 @@ Simply ask Claude about chess:
 - **Interactive puzzle training** across 100+ themes
 - **Position visualization** with 2D/3D boards
 
+## See in action
+
+With ChessAgine position analysis skill + MCP server Claude can analyze chess positions
+
+![ChessAgine Preview](./preview.png)
+
 
 ## Authors
 
