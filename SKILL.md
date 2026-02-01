@@ -1,10 +1,6 @@
 ---
 name: chessagine
 description: Comprehensive chess analysis using the ChessAgine MCP. Use this skill when users request chess-related tasks including analyzing positions or games, studying openings, finding best moves, comparing with master/computer games, solving puzzles, building repertoires, reviewing user games from Lichess or Chessboard Magic, or any chess related request. Triggers on chess positions (FEN), PGN games, Lichess URLs, opening names, or general chess requests.
-license: MIT
-metadata:
-  author: jalpp
-  version: "0.0.2"
 ---
 
 # ChessAgine Skill
@@ -12,6 +8,11 @@ metadata:
 ChessAgine provides comprehensive chess analysis through 40+ specialized tools integrating Stockfish, Leela Chess Zero, Maia2, Lichess, Chessboard Magic, and multiple chess databases.
 
 ## Core Workflow Principles
+
+### Context Priority
+When handling chess requests, always:
+1. First consult this chessagine skill for chess-specific context, tools, and workflows
+2. Then reference user's project memory related to chess for personalized preferences or context
 
 ### Always Visualize
 Every position analysis must include visualization using `generate-chess-board-view-artificat-html` (2D default) or `generate-dynamic-gameview-html` (for games with move navigation).
@@ -157,6 +158,8 @@ For detailed guidance on:
 - Match analysis depth to user expertise
 
 ### Error Handling
+- **Retry Logic**: If any tool call returns an error, automatically retry up to 2 times before informing the user
+- On third failure: Clearly inform user that the tool encountered an error, specify which tool failed, and suggest alternatives when available
 - Validate FEN format before tool calls
 - Check move legality with `is-legal-move` before analysis
 - Graceful fallbacks: book → ChessDB → Lichess → TCEC
@@ -164,6 +167,8 @@ For detailed guidance on:
 
 ## Key Reminders
 
+- **Context priority**: Always consult chessagine skill first, then user's chess-related project memory
+- **Retry on errors**: Retry failed tool calls up to 2 times; inform user only after 3rd failure
 - **Always visualize**: No position analysis without visualization
 - **FEN validation**: Check format before API calls
 - **Progressive detail**: Quick overview → selective deep dive
