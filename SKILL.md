@@ -1,9 +1,9 @@
 ---
-name: chessagine
+name: chessagine-mcp-v060
 description: Comprehensive chess analysis using the ChessAgine MCP. Use this skill when users request chess-related tasks including analyzing positions or games, studying openings, finding best moves, comparing with master/computer games, solving puzzles, building repertoires, reviewing user games from Lichess or Chessboard Magic, or any chess related request. Triggers on chess positions (FEN), PGN games, Lichess URLs, opening names, or general chess requests.
 ---
 
-# ChessAgine Skill
+# ChessAgine MCP Skill v0.6.0 (chessagine-mcp-v060)
 
 ChessAgine provides comprehensive chess analysis through 40+ specialized tools integrating Stockfish, Leela Chess Zero, Maia2, Lichess, Chessboard Magic, and multiple chess databases.
 
@@ -15,7 +15,9 @@ When handling chess requests, always:
 2. Then reference user's project memory related to chess for personalized preferences or context
 
 ### Always Visualize
-Every position analysis must include visualization using `generate-chess-board-view-artificat-html` (2D default) or `generate-dynamic-gameview-html` (for games with move navigation).
+Every position analysis must include visualization using the correct MCP rendering tools:
+- **Single positions**: Use `chessagine-mcp-v0.6.0:render_chess_board` with FEN
+- **Full games**: Use `chessagine-mcp-v0.6.0:render_pgn_viewer` with PGN
 
 ### Multi-Source Validation
 For important positions, combine multiple data sources:
@@ -39,38 +41,38 @@ Start with quick overview, deepen analysis only where critical:
 ## Quick Start Workflows
 
 ### Analyze Position
-1. `get-boardstate-for-fen` (understand position)
-2. `generate-chess-board-view-artificat-html` (visualize)
-3. `get-stockfish-multipv-analysis` (3 lines, depth 22)
-4. `fen-openingbook-lookup` (if opening)
-5. `get-lichess-master-games` (master practice)
-6. Apply chess principles from `get-chess-knowledgebase`
+1. `chessagine-mcp-v0.6.0:get-boardstate-for-fen` (understand position)
+2. `chessagine-mcp-v0.6.0:render_chess_board` (visualize)
+3. `chessagine-mcp-v0.6.0:get-stockfish-multipv-analysis` (3 lines, depth 22)
+4. `chessagine-mcp-v0.6.0:fen-openingbook-lookup` (if opening)
+5. `chessagine-mcp-v0.6.0:get-lichess-master-games` (master practice)
+6. Apply chess principles from `chessagine-mcp-v0.6.0:get-chess-knowledgebase`
 
 ### Analyze Game
-1. `fetch-lichess-game` (get PGN)
-2. `parse-pgn-into-fens` (extract positions)
+1. `chessagine-mcp-v0.6.0:fetch-lichess-game` (get PGN)
+2. `chessagine-mcp-v0.6.0:parse-pgn-into-fens` (extract positions)
 3. Select 3-5 critical moments
-4. `get-stockfish-analysis` on critical positions (depth 20)
-5. `generate-dynamic-gameview-html` (navigable game view)
+4. `chessagine-mcp-v0.6.0:get-stockfish-analysis` on critical positions (depth 20)
+5. `chessagine-mcp-v0.6.0:render_pgn_viewer` (navigable game view)
 
 ### Study Opening
-1. `fen-openingbook-lookup` (identify opening, common moves)
-2. `get-lichess-master-games` (master statistics)
-3. `get-chessboardmagic-tcec-stats` (computer evaluation)
-4. `get-stockfish-multipv-analysis` (5 lines, depth 25)
+1. `chessagine-mcp-v0.6.0:fen-openingbook-lookup` (identify opening, common moves)
+2. `chessagine-mcp-v0.6.0:get-lichess-master-games` (master statistics)
+3. `chessagine-mcp-v0.6.0:get-chessboardmagic-tcec-stats` (computer evaluation)
+4. `chessagine-mcp-v0.6.0:get-stockfish-multipv-analysis` (5 lines, depth 25)
 5. Fetch sample games from relevant database
 
 ### Find Best Move
-1. `get-stockfish-best-move` (tactical solution)
-2. `get-stockfish-multipv-analysis` (alternatives, 3 lines)
-3. Cross-reference with `get-chessdb-analysis`
-4. Explain using `get-chess-knowledgebase` principles
+1. `chessagine-mcp-v0.6.0:get-stockfish-best-move` (tactical solution)
+2. `chessagine-mcp-v0.6.0:get-stockfish-multipv-analysis` (alternatives, 3 lines)
+3. Cross-reference with `chessagine-mcp-v0.6.0:get-chessdb-analysis`
+4. Explain using `chessagine-mcp-v0.6.0:get-chess-knowledgebase` principles
 
 ### Puzzle Training
-1. `get-puzzle-themes` (show available themes)
-2. `fetch-chess-puzzle` (with theme/rating filters)
-3. `generate-chess-board-view-artificat-html` (present)
-4. After attempt: `get-stockfish-best-move` (verify)
+1. `chessagine-mcp-v0.6.0:get-puzzle-themes` (show available themes)
+2. `chessagine-mcp-v0.6.0:fetch-chess-puzzle` (with theme/rating filters)
+3. `chessagine-mcp-v0.6.0:render_chess_board` (present)
+4. After attempt: `chessagine-mcp-v0.6.0:get-stockfish-best-move` (verify)
 5. Explain with chess principles
 
 ## Tool Categories
@@ -99,9 +101,9 @@ Start with quick overview, deepen analysis only where critical:
 - `get-fen-map-lookup` - Map moves to FENs
 - `get-stockfish-batch-analysis` - Analyze multiple positions
 
-### Visualization
-- `generate-chess-board-view-artificat-html` - Single position (2D/3D)
-- `generate-dynamic-gameview-html` - Full game with navigation
+### Visualization (MCP v0.6.0 Tools)
+- `render_chess_board` - Display single position from FEN
+- `render_pgn_viewer` - Interactive game viewer with move navigation
 
 ### Move Validation
 - `is-legal-move` - Check move legality (SAN or UCI)
@@ -151,7 +153,7 @@ For detailed guidance on:
 - Start with opening book (fastest) before databases
 
 ### User Experience
-- Always visualize positions
+- Always visualize positions using MCP rendering tools
 - Explain evaluations in chess terms (not just numbers)
 - Reference chess principles from knowledgebase
 - Provide actionable advice
@@ -169,8 +171,18 @@ For detailed guidance on:
 
 - **Context priority**: Always consult chessagine skill first, then user's chess-related project memory
 - **Retry on errors**: Retry failed tool calls up to 2 times; inform user only after 3rd failure
-- **Always visualize**: No position analysis without visualization
+- **Always visualize**: Use `render_chess_board` for positions, `render_pgn_viewer` for games
 - **FEN validation**: Check format before API calls
 - **Progressive detail**: Quick overview → selective deep dive
 - **Multi-source**: Combine engines, databases, and principles
 - **User-focused**: Match analysis to user's needs and skill level
+
+## Changes in v0.6.0
+
+**Critical Update - Rendering Tools:**
+- ✅ **NEW**: `render_chess_board` - Official MCP tool for single position visualization
+- ✅ **NEW**: `render_pgn_viewer` - Official MCP tool for interactive game viewing
+- ❌ **REMOVED**: `generate-chess-board-view-artificat-html` (old, non-existent tool)
+- ❌ **REMOVED**: `generate-dynamic-gameview-html` (old, non-existent tool)
+
+All tool references throughout the skill have been updated to use the correct MCP v0.6.0 rendering tools.

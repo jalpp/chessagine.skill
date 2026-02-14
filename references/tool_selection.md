@@ -1,14 +1,14 @@
-# ChessAgine Tool Selection Guide
+# ChessAgine Tool Selection Guide (v0.6.0)
 
 ## Quick Reference Matrix
 
 | Task | Primary Tools | Secondary Tools |
 |------|---------------|-----------------|
-| Analyze single position | `get-stockfish-analysis`, `generate-chess-board-view-artificat-html` | `get-leela-analysis`, `get-boardstate-for-fen` |
-| Analyze full game | `fetch-lichess-game`, `parse-pgn-into-fens`, `get-stockfish-batch-analysis` | `get-fen-map-lookup`, `generate-dynamic-gameview-html` |
+| Analyze single position | `get-stockfish-analysis`, `render_chess_board` | `get-leela-analysis`, `get-boardstate-for-fen` |
+| Analyze full game | `fetch-lichess-game`, `parse-pgn-into-fens`, `get-stockfish-batch-analysis` | `get-fen-map-lookup`, `render_pgn_viewer` |
 | Study opening | `fen-openingbook-lookup`, `get-lichess-master-games`, `get-stockfish-multipv-analysis` | `get-chessboardmagic-tcec-stats`, `get-chessboardmagic-corr-stats` |
 | Find best move | `get-stockfish-best-move` | `get-stockfish-multipv-analysis`, `get-chessdb-analysis` |
-| Understand human moves | `get-maia2-analysis`, `get-elite-leela-analysis`, `generate-chess-board-view-artificat-html` | `get-stockfish-analysis` |
+| Understand human moves | `get-maia2-analysis`, `get-elite-leela-analysis`, `render_chess_board` | `get-stockfish-analysis` |
 | Training puzzles | `fetch-chess-puzzle`, `get-puzzle-themes` | `get-stockfish-best-move` |
 | Repertoire work | `get-chessboardmagic-repertoires`, `get-chessboardmagic-repertoire-details` | `get-lichess-master-games`, `get-stockfish-multipv-analysis` |
 | Compare with masters | `get-lichess-master-games`, `get-chessboardmagic-tcec-games` | `get-chessboardmagic-corr-games` |
@@ -54,15 +54,15 @@ Need position statistics?
     └─ ChessDB has best coverage: `get-chessdb-analysis`
 ```
 
-### Visualization Decision
+### Visualization Decision (v0.6.0)
 ```
 What to show user?
 ├─ Single position analysis?
-│   └─ `generate-chess-board-view-artificat-html` (2D default)
+│   └─ `render_chess_board` with FEN
 ├─ Full game or variation?
-│   └─ `generate-dynamic-gameview-html` (navigable)
+│   └─ `render_pgn_viewer` with PGN
 └─ Multiple related positions?
-    └─ Multiple `generate-chess-board-view-artificat-html` calls
+    └─ Multiple `render_chess_board` calls
 ```
 
 ### Game Source Decision
@@ -86,7 +86,7 @@ Where to fetch games?
 4. get-elite-leela-analysis (master-level perspective)
 5. get-lichess-master-games (what masters play)
 6. get-chess-knowledgebase (apply principles)
-7. generate-chess-board-view-artificat-html (visualize)
+7. render_chess_board (visualize - v0.6.0)
 ```
 
 ### Pattern 2: Game Analysis Lite (Fast)
@@ -95,7 +95,7 @@ Where to fetch games?
 2. parse-pgn-into-fens (extract positions)
 3. Identify 3-5 critical moments (user mistakes, tactical points)
 4. get-stockfish-analysis on those positions only (depth 20)
-5. generate-dynamic-gameview-html (show game with annotations)
+5. render_pgn_viewer (show game with annotations - v0.6.0)
 ```
 
 ### Pattern 3: Game Analysis Pro (Thorough)
@@ -109,7 +109,7 @@ Where to fetch games?
    - get-stockfish-multipv-analysis (why better moves exist)
    - get-chess-knowledgebase (what principle violated)
 7. Check opening: fen-openingbook-lookup + get-lichess-master-games
-8. generate-dynamic-gameview-html with detailed annotations
+8. render_pgn_viewer with detailed annotations (v0.6.0)
 ```
 
 ### Pattern 4: Opening Study
@@ -141,7 +141,7 @@ Where to fetch games?
 1. get-puzzle-themes (show available themes)
 2. User selects theme and rating range
 3. fetch-chess-puzzle (with filters)
-4. generate-chess-board-view-artificat-html (present puzzle)
+4. render_chess_board (present puzzle - v0.6.0)
 5. User attempts solution
 6. get-stockfish-best-move (verify solution)
 7. If wrong: explain with get-chess-knowledgebase principles
@@ -223,9 +223,10 @@ Where to fetch games?
    - Verify FEN format before analysis
    - Consider time constraints (user wants quick answer vs deep study)
 
-4. **Missing visualization**:
-   - Always show position when analyzing
-   - Use dynamic view for games, static for single positions
+4. **Missing visualization (v0.6.0)**:
+   - Always show position when analyzing using `render_chess_board`
+   - Use `render_pgn_viewer` for games, not static boards
+   - Ensure FEN/PGN is valid before rendering
 
 5. **Not leveraging databases**:
    - Opening book lookup is fast - use it first
@@ -249,3 +250,11 @@ Where to fetch games?
 - "Quick analysis" → Stockfish depth 18, fewer tools
 - "Deep dive" → Stockfish depth 25+, Elite Leela, databases
 - No time mention → Standard Stockfish depth 20-22
+
+## v0.6.0 Changes
+
+**Rendering Tool Updates:**
+All visualization patterns now use MCP v0.6.0 tools:
+- ✅ `render_chess_board` - For single position visualization (FEN input)
+- ✅ `render_pgn_viewer` - For game visualization with move navigation (PGN input)
+- ❌ Removed all references to non-existent old rendering tools
