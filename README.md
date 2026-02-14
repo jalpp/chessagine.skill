@@ -1,5 +1,5 @@
 
-# ChessAgine Skill
+# ChessAgine Skill V0.6.0
 
 The ChessAgine skill enables Claude to be a chess buddy and analyst by leveraging 40+ specialized tools from the ChessAgine MCP server.
 

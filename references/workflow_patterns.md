@@ -1,4 +1,4 @@
-# ChessAgine Workflow Patterns
+# ChessAgine Workflow Patterns (v0.6.0)
 
 ## Game Analysis Workflows
 
@@ -8,7 +8,7 @@
 3. Batch analyze critical positions: `get-stockfish-batch-analysis`
 4. Cross-reference with opening book: `fen-openingbook-lookup`
 5. Compare with master games at key positions: `get-lichess-master-games`
-6. Generate visualization: `generate-dynamic-gameview-html`
+6. Generate visualization: `render_pgn_viewer` (MCP v0.6.0)
 
 ### Opening Preparation
 1. Start from opening FEN
@@ -30,7 +30,7 @@
 3. Database lookup: `get-chessdb-analysis`
 4. Check opening book: `fen-openingbook-lookup`
 5. Apply chess principles: `get-chess-knowledgebase`
-6. Visualize: `generate-chess-board-view-artificat-html`
+6. Visualize: `render_chess_board` (MCP v0.6.0)
 
 ### Repertoire Building
 1. Fetch existing repertoires: `get-chessboardmagic-repertoires`
@@ -44,7 +44,7 @@
 ### Puzzle Training
 1. Get puzzle themes: `get-puzzle-themes`
 2. Fetch targeted puzzle: `fetch-chess-puzzle` with theme/rating filters
-3. Present position: `generate-chess-board-view-artificat-html`
+3. Present position: `render_chess_board` (MCP v0.6.0)
 4. After user attempts, analyze: `get-stockfish-best-move`
 5. Explain with principles: `get-chess-knowledgebase`
 
@@ -95,25 +95,27 @@ Start broad, then narrow:
 4. For unclear positions, check correspondence for human judgment
 5. Use ChessDB for less common positions
 
-## Visualization Best Practices
+## Visualization Best Practices (v0.6.0)
 
-### 2D vs 3D Board Views
-- **2D view**: Default for analysis, clearer for most users
-- **3D view**: Special cases (beginner engagement, presentation)
+### MCP Rendering Tools
+- **`render_chess_board`**: For single positions (FEN input)
+- **`render_pgn_viewer`**: For full games with move navigation (PGN input)
 
-### Dynamic Game View
-Use `generate-dynamic-gameview-html` when:
+### When to Use render_pgn_viewer
+Use when:
 - Showing full game with move navigation
 - Demonstrating opening variations
 - Replaying critical sequences
 - Teaching tactical patterns through multiple positions
+- User needs to step through moves interactively
 
-### Static Position View
-Use `generate-chess-board-view-artificat-html` when:
+### When to Use render_chess_board
+Use when:
 - Analyzing single position
 - Presenting puzzle
 - Showing final position
 - Quick position verification
+- Position-specific analysis without move history
 
 ## FEN Handling Patterns
 
@@ -149,7 +151,15 @@ For game analysis:
 - For deep analysis, analyze fewer but more critical positions
 
 ### User Experience
-- Always show position visually when analyzing
+- Always show position visually when analyzing (use MCP rendering tools)
 - Explain engine evaluations in chess terms (advantages, threats)
 - Reference chess principles from knowledgebase
 - Provide actionable advice, not just numbers
+
+## v0.6.0 Changes
+
+**Rendering Tool Updates:**
+- ✅ Now using `render_chess_board` for single positions
+- ✅ Now using `render_pgn_viewer` for full games
+- ❌ Removed references to non-existent `generate-chess-board-view-artificat-html`
+- ❌ Removed references to non-existent `generate-dynamic-gameview-html`
