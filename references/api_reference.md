@@ -1,4 +1,4 @@
-# ChessAgine Tool Parameters Reference
+# ChessAgine Tool Parameters Reference (v0.6.3)
 
 ## FEN Format Requirements
 All FEN-accepting tools require valid FEN strings matching:
@@ -9,7 +9,7 @@ All FEN-accepting tools require valid FEN strings matching:
 Components:
 1. Piece placement (8 ranks, / separated)
 2. Side to move (w/b)
-3. Castling availability (KQkq or -)
+3. Castling availability (KQkq or -; Chess 960 uses file letters e.g. HAha)
 4. En passant square (e.g., e3 or -)
 5. Halfmove clock
 6. Fullmove number
@@ -20,6 +20,35 @@ Components:
 **Stockfish depth**: 12-30 (recommend 18-25)
 **MultiPV numLines**: 1-5
 **Maia2 rating**: Must be one of [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900]
+
+### Chess 960 (is960 parameter)
+Pass `is960: true` on any supporting tool when working with Fischer Random positions.
+Supporting tools: `get-boardstate-for-fen`, `get-boardstate-for-move`, `is-legal-move`,
+`get-theme-scores`, `get-theme-progression`, `analyze-variation-themes`, `compare-variations`,
+`find-critical-moments`, `generate-game-review`
+
+### Theme Analysis (New in v0.6.3)
+**Theme enum**: `material | mobility | space | positional | kingSafety | tactical | lightsqaureControl | darksqaureControl`
+**color**: `w` or `b` (side to evaluate from)
+**threshold** (find-critical-moments): 0.1-2.0, default 0.5 (lower = more moments detected)
+
+### generate-game-review
+**format**: `text` (human-readable) or `json` (structured data)
+**criticalMomentThreshold**: 0.1-2.0, default 0.5
+**is960**: boolean, default false
+
+### compare-variations input shape
+```json
+{
+  "color": "w",
+  "rootFen": "<FEN>",
+  "variations": [
+    { "name": "Main line", "moves": ["e4", "e5", "Nf3"] },
+    { "name": "Alternative", "moves": ["e4", "e5", "d4"] }
+  ],
+  "is960": false
+}
+```
 
 ### Puzzle Fetching
 **ratingFrom**: Minimum 1000
@@ -69,6 +98,18 @@ Returns: Game statistics, move frequencies, results breakdown
 ### Board State
 Returns: Text description of position including piece locations, threats, material count
 
+### Theme Scores
+Returns: Object with scores per theme (positive = White better, negative = Black better, 0 = equal)
+
+### generate-game-review (text format)
+Returns: Human-readable report covering theme progression, critical moments, opening/middlegame/endgame phases
+
+### generate-game-review (json format)
+Returns: Structured JSON with per-move theme data and annotated critical moments
+
+### get-tactical-position-summary
+Returns: List of tactical features — hanging pieces, forks, pins, semi-protected pieces
+
 ## Error Patterns
 
 ### Common Errors
@@ -82,3 +123,4 @@ Returns: Text description of position including piece locations, threats, materi
 - Opening not in book → Use ChessDB or Lichess instead
 - No TCEC data → Fall back to correspondence or master games
 - Tool timeout → Reduce depth or batch size
+- Chess 960 position → Skip opening book / master game lookups (standard chess only)
